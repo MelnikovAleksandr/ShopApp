@@ -4,29 +4,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var productService: ProductService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-
-        val productService = retrofit.create(ProductService::class.java)
 
         lifecycleScope.launchWhenStarted {
             val response = productService.getAllProducts()
             Log.i("DATA_FROM_API", response.body().toString())
         }
-
     }
 
     interface ProductService {
