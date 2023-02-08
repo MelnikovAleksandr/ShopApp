@@ -40,8 +40,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesProductService(retrofit: Retrofit): MainActivity.ProductService {
-        return retrofit.create(MainActivity.ProductService::class.java)
+    fun providesProductService(retrofit: Retrofit): ProductService {
+        return retrofit.create(ProductService::class.java)
     }
 
 }
