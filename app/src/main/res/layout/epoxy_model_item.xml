@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -129,7 +128,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 app:backgroundTint="@color/teal_400"
-                app:icon="@drawable/ic_baseline_check_circle_outline_24"
+                app:icon="@drawable/ic_baseline_check_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="10dp"
@@ -143,17 +142,137 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/product_description_text_view"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="12dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:textColor="@color/purple_700"-->
-<!--        android:textSize="14sp"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/card_view"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/card_view"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/card_view"-->
-<!--        tools:text="Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/product_description_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/purple_700"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/card_view"
+        app:layout_constraintStart_toStartOf="@+id/card_view"
+        app:layout_constraintTop_toBottomOf="@+id/card_view"
+        tools:text="Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
+        tools:visibility="gone" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/corner_radius"
+            app:layout_constraintBottom_toTopOf="@id/product_description_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/product_image_view_shimmer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:alpha="0.25"
+                    android:background="@drawable/background_rounded_12"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/favorite_image_view_shimmer"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:alpha="0.35"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:backgroundTint="@color/black"
+                    app:iconGravity="textEnd"
+                    app:iconSize="12dp"
+                    app:layout_constraintEnd_toEndOf="@id/product_image_view_shimmer"
+                    app:layout_constraintTop_toTopOf="@id/product_image_view_shimmer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/product_title_text_view_shimmer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/background_rounded_12"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/purple_700"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/product_image_view_shimmer"
+                    app:layout_constraintTop_toTopOf="@id/product_image_view_shimmer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/product_category_text_view_shimmer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.25"
+                    android:background="@drawable/background_rounded_12"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/purple_500"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="@id/product_title_text_view_shimmer"
+                    app:layout_constraintStart_toStartOf="@id/product_title_text_view_shimmer"
+                    app:layout_constraintTop_toBottomOf="@id/product_title_text_view_shimmer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/product_price_text_view_shimmer"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.25"
+                    android:background="@drawable/background_rounded_12"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/purple_500"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/add_to_cart_button_shimmer"
+                    app:layout_constraintStart_toStartOf="@id/product_title_text_view_shimmer"
+                    app:layout_constraintTop_toTopOf="@id/add_to_cart_button_shimmer" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add_to_cart_button_shimmer"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="68dp"
+                    android:layout_height="34dp"
+                    android:layout_margin="8dp"
+                    android:alpha="0.35"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:backgroundTint="@color/black"
+                    app:cornerRadius="@dimen/corner_radius"
+                    app:iconGravity="textEnd"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
