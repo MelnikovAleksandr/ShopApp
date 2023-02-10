@@ -7,28 +7,36 @@ import coil.load
 import ru.asmelnikov.android.shopapp.databinding.EpoxyModelItemBinding
 import ru.asmelnikov.android.shopapp.epoxy.ViewBindingKotlinModel
 import ru.asmelnikov.android.shopapp.models.domain.Product
+import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 import java.text.NumberFormat
 
-data class ProductEpoxyModel(
-    val product: Product?
+data class UiProductEpoxyModel(
+    val uiProduct: UiProduct?
 ) : ViewBindingKotlinModel<EpoxyModelItemBinding>(R.layout.epoxy_model_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
 
     override fun EpoxyModelItemBinding.bind() {
-        shimmerLayout.isVisible = product == null
-        cardView.isInvisible = product == null
+        shimmerLayout.isVisible = uiProduct == null
+        cardView.isInvisible = uiProduct == null
 
-        product?.let { product ->
+        uiProduct?.let { uiProduct ->
             shimmerLayout.stopShimmer()
 
-            productTitleTextView.text = product.title
-            productCategoryTextView.text = product.category
-            productPriceTextView.text = currencyFormatter.format(product.price)
+            productTitleTextView.text = uiProduct.product.title
+            productCategoryTextView.text = uiProduct.product.category
+            productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
+
+            val imageRes = if (uiProduct.isFavorite) {
+                R.drawable.ic_baseline_favorite_24
+            } else {
+                R.drawable.ic_baseline_favorite_border_24
+            }
+            favoriteImageView.setIconResource(imageRes)
 
             imgProgressBar.isVisible = true
             productImageView.load(
-                data = product.image
+                data = uiProduct.product.image
             ) {
                 listener { request, result ->
                     imgProgressBar.isGone = true
