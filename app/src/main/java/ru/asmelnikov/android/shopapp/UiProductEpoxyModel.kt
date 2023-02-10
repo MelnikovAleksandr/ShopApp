@@ -11,7 +11,8 @@ import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 import java.text.NumberFormat
 
 data class UiProductEpoxyModel(
-    val uiProduct: UiProduct?
+    val uiProduct: UiProduct?,
+    val onFavoriteIconClicked: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelItemBinding>(R.layout.epoxy_model_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -33,6 +34,9 @@ data class UiProductEpoxyModel(
                 R.drawable.ic_baseline_favorite_border_24
             }
             favoriteImageView.setIconResource(imageRes)
+            favoriteImageView.setOnClickListener {
+                onFavoriteIconClicked(uiProduct.product.id)
+            }
 
             imgProgressBar.isVisible = true
             productImageView.load(
