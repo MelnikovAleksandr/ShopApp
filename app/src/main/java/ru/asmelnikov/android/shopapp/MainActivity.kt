@@ -2,9 +2,13 @@ package ru.asmelnikov.android.shopapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import retrofit2.Response
 import ru.asmelnikov.android.shopapp.databinding.ActivityMainBinding
 import ru.asmelnikov.android.shopapp.hilt.ProductService
@@ -16,13 +20,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var productService: ProductService
-
-    @Inject
-    lateinit var productMapper: ProductMapper
-
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainActivityViewModel by lazy {
+        ViewModelProvider(this)[MainActivityViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +35,12 @@ class MainActivity : AppCompatActivity() {
         binding.epoxyRecyclerView.setController(controller)
         controller.setData(emptyList())
 
-        lifecycleScope.launchWhenStarted {
-            val response: Response<List<NetworkProduct>> = productService.getAllProducts()
-            val domainProduct: List<Product> = response.body()?.map {
-                productMapper.buildFrom(networkProduct = it)
-            } ?: emptyList()
-            controller.setData(domainProduct)
-
-            if (domainProduct.isEmpty()) {
-                Snackbar.make(binding.root, "Failed to fetch", Snackbar.LENGTH_LONG).show()
-            }
+        viewModel.store.stateFlow.map {
+            it.products
+        }.distinctUntilChanged().asLiveData().observe(this) { products ->
+            controller.setData(products)
         }
+        viewModel.refreshProducts()
+
     }
 }
