@@ -55,6 +55,8 @@ dependencies {
     // Lifecycle
     def lifecycleVersion = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
     // Hilt
     def hiltVersion = "2.44.2"
