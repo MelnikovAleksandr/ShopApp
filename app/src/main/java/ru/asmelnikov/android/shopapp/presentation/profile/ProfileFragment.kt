@@ -1,11 +1,10 @@
-package ru.asmelnikov.android.shopapp
+package ru.asmelnikov.android.shopapp.presentation.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import ru.asmelnikov.android.shopapp.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
