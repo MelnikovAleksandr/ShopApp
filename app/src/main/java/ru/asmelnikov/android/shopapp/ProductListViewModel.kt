@@ -10,7 +10,7 @@ import ru.asmelnikov.android.shopapp.redux.Store
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class ProductListViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     val store: Store<ApplicationState>
 ) : ViewModel() {
