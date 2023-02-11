@@ -79,4 +79,9 @@ dependencies {
     // Facebook shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // Navigation Components
+    def navVersion = "2.5.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
+
 }

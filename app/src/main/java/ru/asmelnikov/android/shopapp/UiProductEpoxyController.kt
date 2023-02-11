@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 
 class UiProductEpoxyController(
-    private val viewModel: MainActivityViewModel
+    private val viewModel: ProductListViewModel
 ) : TypedEpoxyController<List<UiProduct>>() {
 
     override fun buildModels(data: List<UiProduct>?) {
