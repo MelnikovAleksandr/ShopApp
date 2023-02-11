@@ -12,7 +12,8 @@ import java.text.NumberFormat
 
 data class UiProductEpoxyModel(
     val uiProduct: UiProduct?,
-    val onFavoriteIconClicked: (Int) -> Unit
+    val onFavoriteIconClicked: (Int) -> Unit,
+    val onUiProductClicked: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelItemBinding>(R.layout.epoxy_model_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -25,8 +26,12 @@ data class UiProductEpoxyModel(
             shimmerLayout.stopShimmer()
 
             productTitleTextView.text = uiProduct.product.title
+            productDescriptionTextView.text = uiProduct.product.description
             productCategoryTextView.text = uiProduct.product.category
             productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
+
+            productDescriptionTextView.isVisible = uiProduct.isExpanded
+            root.setOnClickListener { onUiProductClicked(uiProduct.product.id) }
 
             val imageRes = if (uiProduct.isFavorite) {
                 R.drawable.ic_baseline_favorite_24
