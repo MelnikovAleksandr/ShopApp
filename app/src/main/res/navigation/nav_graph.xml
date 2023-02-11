@@ -15,5 +15,10 @@
         android:name="ru.asmelnikov.android.shopapp.presentation.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="ru.asmelnikov.android.shopapp.presentation.cart.CartFragment"
+        android:label="Your Cart"
+        tools:layout="@layout/fragment_cart"/>
 
 </navigation>

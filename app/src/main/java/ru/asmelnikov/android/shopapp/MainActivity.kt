@@ -2,17 +2,27 @@ package ru.asmelnikov.android.shopapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.airbnb.epoxy.Carousel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.databinding.ActivityMainBinding
+import ru.asmelnikov.android.shopapp.redux.ApplicationState
+import ru.asmelnikov.android.shopapp.redux.Store
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var store: Store<ApplicationState>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
                 R.id.productListFragment,
-                R.id.profileFragment
+                R.id.profileFragment,
+                R.id.cartFragment
             )
         )
         val navHostFragment =
@@ -32,5 +43,15 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+
+        Carousel.setDefaultGlobalSnapHelperFactory(null)
+
+        store.stateFlow.map { it.inCartProducts.size }.distinctUntilChanged().asLiveData()
+            .observe(this) { productsInCart ->
+                binding.bottomNavigationView.getOrCreateBadge(R.id.cartFragment).apply {
+                    number = productsInCart
+                    isVisible = productsInCart > 0
+                }
+            }
     }
 }

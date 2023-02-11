@@ -13,7 +13,8 @@ import java.text.NumberFormat
 data class UiProductEpoxyModel(
     val uiProduct: UiProduct?,
     val onFavoriteIconClicked: (Int) -> Unit,
-    val onUiProductClicked: (Int) -> Unit
+    val onUiProductClicked: (Int) -> Unit,
+    val onAddCartClicked: (Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelItemBinding>(R.layout.epoxy_model_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -25,14 +26,17 @@ data class UiProductEpoxyModel(
         uiProduct?.let { uiProduct ->
             shimmerLayout.stopShimmer()
 
+            //Setup text
             productTitleTextView.text = uiProduct.product.title
             productDescriptionTextView.text = uiProduct.product.description
             productCategoryTextView.text = uiProduct.product.category
             productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
 
+            //Expanded state
             productDescriptionTextView.isVisible = uiProduct.isExpanded
             root.setOnClickListener { onUiProductClicked(uiProduct.product.id) }
 
+            //Favorite icon
             val imageRes = if (uiProduct.isFavorite) {
                 R.drawable.ic_baseline_favorite_24
             } else {
@@ -43,6 +47,13 @@ data class UiProductEpoxyModel(
                 onFavoriteIconClicked(uiProduct.product.id)
             }
 
+            //In Cart status
+            inCartView.isVisible = uiProduct.isInCart
+            addToCartButton.setOnClickListener {
+                onAddCartClicked(uiProduct.product.id)
+            }
+
+            //Load image
             imgProgressBar.isVisible = true
             productImageView.load(
                 data = uiProduct.product.image

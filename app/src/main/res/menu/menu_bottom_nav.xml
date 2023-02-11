@@ -6,6 +6,10 @@
         android:icon="@drawable/ic_round_view_list_24"
         android:title="List" />
     <item
+        android:id="@+id/cartFragment"
+        android:icon="@drawable/ic_round_shopping_cart_24"
+        android:title="Cart" />
+    <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_round_person_24"
         android:title="Profile" />
