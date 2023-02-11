@@ -1,6 +1,5 @@
-package ru.asmelnikov.android.shopapp
+package ru.asmelnikov.android.shopapp.hilt
 
-import ru.asmelnikov.android.shopapp.hilt.ProductService
 import ru.asmelnikov.android.shopapp.models.domain.Product
 import ru.asmelnikov.android.shopapp.models.mapper.ProductMapper
 import javax.inject.Inject

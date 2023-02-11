@@ -150,8 +150,8 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_description_text_view"
-        android:layout_width="4dp"
-        android:layout_height="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/purple_700"
@@ -162,7 +162,7 @@
         app:layout_constraintStart_toStartOf="@+id/card_view"
         app:layout_constraintTop_toBottomOf="@+id/card_view"
         tools:text="Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_layout"

@@ -1,12 +1,12 @@
-package ru.asmelnikov.android.shopapp
+package ru.asmelnikov.android.shopapp.presentation.list
 
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import coil.load
+import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.EpoxyModelItemBinding
 import ru.asmelnikov.android.shopapp.epoxy.ViewBindingKotlinModel
-import ru.asmelnikov.android.shopapp.models.domain.Product
 import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 import java.text.NumberFormat
 
