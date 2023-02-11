@@ -15,7 +15,8 @@ class UiProductEpoxyController(
                 val epoxyId = it + 1
                 UiProductEpoxyModel(
                     uiProduct = null,
-                    onFavoriteIconClicked = ::onFavoriteIconClicked
+                    onFavoriteIconClicked = ::onFavoriteIconClicked,
+                    onUiProductClicked = ::onUiProductClicked
                 ).id(epoxyId).addTo(this)
             }
             return
@@ -23,7 +24,8 @@ class UiProductEpoxyController(
         data.forEach { uiProduct ->
             UiProductEpoxyModel(
                 uiProduct = uiProduct,
-                onFavoriteIconClicked = ::onFavoriteIconClicked
+                onFavoriteIconClicked = ::onFavoriteIconClicked,
+                onUiProductClicked = ::onUiProductClicked
             ).id(uiProduct.product.id)
                 .addTo(this)
         }
@@ -39,6 +41,20 @@ class UiProductEpoxyController(
                     currentFavoriteIds + setOf(selectedProductId)
                 }
                 return@update currentState.copy(favoriteProductIds = newFavoriteIds)
+            }
+        }
+    }
+
+    private fun onUiProductClicked(productId: Int) {
+        viewModel.viewModelScope.launch {
+            viewModel.store.update { currentState ->
+                val currentExpendedIds = currentState.expandedProductIds
+                val newExpendedIds = if (currentExpendedIds.contains(productId)) {
+                    currentExpendedIds.filter { it != productId }.toSet()
+                } else {
+                    currentExpendedIds + setOf(productId)
+                }
+                return@update currentState.copy(expandedProductIds = newExpendedIds)
             }
         }
     }
