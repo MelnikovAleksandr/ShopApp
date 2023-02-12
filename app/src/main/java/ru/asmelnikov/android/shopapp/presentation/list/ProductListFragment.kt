@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.databinding.FragmentProductListBinding
 import ru.asmelnikov.android.shopapp.models.ui.UiFilter
-import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 
 
 @AndroidEntryPoint
@@ -40,25 +39,11 @@ class ProductListFragment : Fragment() {
         binding.epoxyRecyclerView.setController(controller)
 
         combine(
-            viewModel.store.stateFlow.map { it.products },
-            viewModel.store.stateFlow.map { it.favoriteProductIds },
-            viewModel.store.stateFlow.map { it.expandedProductIds },
+            viewModel.uiProductListReducer.reduce(viewModel.store),
             viewModel.store.stateFlow.map { it.productFilterInfo },
-            viewModel.store.stateFlow.map { it.inCartProducts }
-
-        ) { listOfProducts, setOfFavoriteIds, setExpandedIds, productFilter, inCartProductsIds ->
-
-            if (listOfProducts.isEmpty()) {
+        ) { uiProducts, productFilter ->
+            if (uiProducts.isEmpty()) {
                 return@combine ProductsListFragmentUiState.Loading
-            }
-
-            val uiProducts = listOfProducts.map { product ->
-                UiProduct(
-                    product = product,
-                    isFavorite = setOfFavoriteIds.contains(product.id),
-                    isExpanded = setExpandedIds.contains(product.id),
-                    isInCart = inCartProductsIds.contains(product.id)
-                )
             }
 
             val uiFilters = productFilter.filters.map { filter ->
@@ -66,6 +51,7 @@ class ProductListFragment : Fragment() {
                     filter = filter,
                     isSelected = productFilter.selectedFilter?.equals(filter) == true
                 )
+
             }.toSet()
 
             val filterProducts = if (productFilter.selectedFilter == null) {
