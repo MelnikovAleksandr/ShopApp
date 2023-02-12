@@ -9,13 +9,15 @@ import ru.asmelnikov.android.shopapp.models.domain.Filter
 import ru.asmelnikov.android.shopapp.models.domain.Product
 import ru.asmelnikov.android.shopapp.redux.ApplicationState
 import ru.asmelnikov.android.shopapp.redux.Store
+import ru.asmelnikov.android.shopapp.redux.reducer.UiProductListReducer
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     val store: Store<ApplicationState>,
-    private val filterGenerator: FilterGenerator
+    private val filterGenerator: FilterGenerator,
+    val uiProductListReducer: UiProductListReducer
 ) : ViewModel() {
 
     fun refreshProducts() = viewModelScope.launch {
