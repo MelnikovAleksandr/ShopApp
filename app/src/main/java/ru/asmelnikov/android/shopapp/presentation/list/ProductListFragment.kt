@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.databinding.FragmentProductListBinding
-import ru.asmelnikov.android.shopapp.models.ui.UiFilter
-
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProductListFragment : Fragment() {
@@ -22,6 +21,9 @@ class ProductListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProductListViewModel by viewModels()
+
+    @Inject
+    lateinit var uiStateGenerator: ProductsListFragmentUiStateGenerator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,28 +44,7 @@ class ProductListFragment : Fragment() {
             viewModel.uiProductListReducer.reduce(viewModel.store),
             viewModel.store.stateFlow.map { it.productFilterInfo },
         ) { uiProducts, productFilter ->
-            if (uiProducts.isEmpty()) {
-                return@combine ProductsListFragmentUiState.Loading
-            }
-
-            val uiFilters = productFilter.filters.map { filter ->
-                UiFilter(
-                    filter = filter,
-                    isSelected = productFilter.selectedFilter?.equals(filter) == true
-                )
-
-            }.toSet()
-
-            val filterProducts = if (productFilter.selectedFilter == null) {
-                uiProducts
-            } else {
-                uiProducts.filter {
-                    it.product.category == productFilter.selectedFilter.value
-                }
-            }
-
-            return@combine ProductsListFragmentUiState.Success(uiFilters, filterProducts)
-
+            uiStateGenerator.generate(uiProducts, productFilter)
         }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { uiProducts ->
             controller.setData(uiProducts)
         }

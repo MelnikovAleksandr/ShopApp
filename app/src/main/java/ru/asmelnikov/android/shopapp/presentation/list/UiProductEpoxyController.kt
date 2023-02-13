@@ -58,13 +58,9 @@ class UiProductEpoxyController(
     private fun onFavoriteIconClicked(selectedProductId: Int) {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
-                val currentFavoriteIds = currentState.favoriteProductIds
-                val newFavoriteIds = if (currentFavoriteIds.contains(selectedProductId)) {
-                    currentFavoriteIds.filter { it != selectedProductId }.toSet()
-                } else {
-                    currentFavoriteIds + setOf(selectedProductId)
-                }
-                return@update currentState.copy(favoriteProductIds = newFavoriteIds)
+                return@update viewModel.uiProductFavoriteUpdater.onProductFavorite(
+                    productId = selectedProductId, currentState = currentState
+                )
             }
         }
     }
@@ -99,13 +95,9 @@ class UiProductEpoxyController(
     private fun onAddCartClicked(productId: Int) {
         viewModel.viewModelScope.launch {
             viewModel.store.update { currentState ->
-                val currentProductInCart = currentState.inCartProducts
-                val newProductInCart = if (currentProductInCart.contains(productId)) {
-                    currentProductInCart.filter { it != productId }.toSet()
-                } else {
-                    currentProductInCart + setOf(productId)
-                }
-                return@update currentState.copy(inCartProducts = newProductInCart)
+                return@update viewModel.uiProductInCartUpdater.update(
+                    productId = productId, currentState = currentState
+                )
             }
         }
     }
