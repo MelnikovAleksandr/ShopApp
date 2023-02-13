@@ -61,4 +61,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <include
+        android:id="@+id/quantity_view"
+        layout="@layout/layout_quantity_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/delete_cart"
+        app:layout_constraintStart_toStartOf="@+id/product_title_text_view"
+        app:layout_constraintTop_toTopOf="@id/delete_cart" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
