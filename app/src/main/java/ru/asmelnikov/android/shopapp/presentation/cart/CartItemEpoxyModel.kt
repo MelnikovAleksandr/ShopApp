@@ -13,12 +13,11 @@ data class CartItemEpoxyModel(
     val uiProductInCart: UiProductCart,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
     private val onFavoriteIconClicked: () -> Unit,
-    private val onDeleteClicked: () -> Unit,
     private val onQuantityChanged: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartItemBinding>(R.layout.epoxy_model_cart_item) {
 
     override fun EpoxyModelCartItemBinding.bind() {
-
+        swipeToDismissTextView.translationX = 0f
         // Setup text
         productTitleTextView.text = uiProductInCart.uiProduct.product.title
 
@@ -32,8 +31,6 @@ data class CartItemEpoxyModel(
         favoriteImageView.setOnClickListener {
             onFavoriteIconClicked()
         }
-
-        deleteCart.setOnClickListener { onDeleteClicked() }
 
         //Load image
         productImageView.load(data = uiProductInCart.uiProduct.product.image)

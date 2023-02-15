@@ -1,7 +1,6 @@
 package ru.asmelnikov.android.shopapp
 
 import android.os.Bundle
-import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.NavHostFragment
