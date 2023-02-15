@@ -19,6 +19,12 @@
         android:id="@+id/cartFragment"
         android:name="ru.asmelnikov.android.shopapp.presentation.cart.CartFragment"
         android:label="Your Cart"
-        tools:layout="@layout/fragment_cart"/>
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/action_cartFragment_to_productListFragment"
+            app:destination="@id/productListFragment"
+            app:popUpTo="@+id/productListFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>
