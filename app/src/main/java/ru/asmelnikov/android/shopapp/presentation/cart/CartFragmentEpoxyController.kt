@@ -1,41 +1,64 @@
 package ru.asmelnikov.android.shopapp.presentation.cart
 
-import android.view.ViewGroup
-import androidx.annotation.Dimension
-import androidx.core.view.updateLayoutParams
-import coil.load
+import androidx.lifecycle.viewModelScope
 import com.airbnb.epoxy.TypedEpoxyController
-import ru.asmelnikov.android.shopapp.R
-import ru.asmelnikov.android.shopapp.databinding.EpoxyModelCartItemBinding
+import kotlinx.coroutines.launch
 import ru.asmelnikov.android.shopapp.epoxy.VerticalSpaceEpoxyModel
-import ru.asmelnikov.android.shopapp.epoxy.ViewBindingKotlinModel
 import ru.asmelnikov.android.shopapp.extensions.toPX
-import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 
-class CartFragmentEpoxyController : TypedEpoxyController<CartFragment.UiState>() {
+class CartFragmentEpoxyController(
+    private val viewModel: CartFragmentViewModel,
+    private val onEmptyClicked: () -> Unit
+) : TypedEpoxyController<CartFragment.UiState>() {
 
     override fun buildModels(data: CartFragment.UiState?) {
         when (data) {
             null, is CartFragment.UiState.Empty -> {
                 CartEmptyEpoxyModel(onClick = {
+                    onEmptyClicked()
 
                 }).id("empty_state").addTo(this)
             }
             is CartFragment.UiState.NonEmpty -> {
-                data.products.forEachIndexed { index, uiProduct ->
+                data.products.forEachIndexed { index, uiProductInCart ->
 
                     addVerticalStyling(index)
 
                     CartItemEpoxyModel(
-                        uiProduct = uiProduct,
+                        uiProductInCart = uiProductInCart,
                         horizontalMargin = 16.toPX(),
                         onFavoriteIconClicked = {
-
+                            viewModel.viewModelScope.launch {
+                                viewModel.store.update {
+                                    return@update viewModel.uiProductFavoriteUpdater.onProductFavorite(
+                                        productId = uiProductInCart.uiProduct.product.id,
+                                        currentState = it
+                                    )
+                                }
+                            }
                         },
                         onDeleteClicked = {
-
+                            viewModel.viewModelScope.launch {
+                                viewModel.store.update {
+                                    return@update viewModel.uiProductInCartUpdater.update(
+                                        productId = uiProductInCart.uiProduct.product.id,
+                                        currentState = it
+                                    )
+                                }
+                            }
+                        },
+                        onQuantityChanged = { newQuantity: Int ->
+                            if (newQuantity < 1 || newQuantity > 99) return@CartItemEpoxyModel
+                            viewModel.viewModelScope.launch {
+                                viewModel.store.update { currentState ->
+                                    val newMapEntry =
+                                        uiProductInCart.uiProduct.product.id to newQuantity
+                                    val newMap = currentState.cartQuantitiesMap + newMapEntry
+                                    return@update currentState.copy(cartQuantitiesMap = newMap)
+                                }
+                            }
                         }
-                    ).id(uiProduct.product.id).addTo(this)
+                    ).id(uiProductInCart.uiProduct.product.id).addTo(this)
                 }
             }
         }
@@ -50,45 +73,5 @@ class CartFragmentEpoxyController : TypedEpoxyController<CartFragment.UiState>()
         }
 
         VerticalSpaceEpoxyModel(8.toPX()).id("bottom_space_$index").addTo(this)
-    }
-
-    data class CartItemEpoxyModel(
-        val uiProduct: UiProduct,
-        @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
-        val onFavoriteIconClicked: () -> Unit,
-        val onDeleteClicked: () -> Unit
-    ) : ViewBindingKotlinModel<EpoxyModelCartItemBinding>(R.layout.epoxy_model_cart_item) {
-
-        override fun EpoxyModelCartItemBinding.bind() {
-
-            // Setup text
-            productTitleTextView.text = uiProduct.product.title
-
-            //Favorite icon
-            val imageRes = if (uiProduct.isFavorite) {
-                R.drawable.ic_baseline_favorite_24
-            } else {
-                R.drawable.ic_baseline_favorite_border_24
-            }
-            favoriteImageView.setIconResource(imageRes)
-            favoriteImageView.setOnClickListener {
-                onFavoriteIconClicked()
-            }
-
-            deleteCart.setOnClickListener { onDeleteClicked() }
-
-            //Load image
-            productImageView.load(data = uiProduct.product.image)
-
-            root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                setMargins(horizontalMargin, 0, horizontalMargin, 0)
-            }
-
-            quantityView.apply {
-                quantityTextView.text = 9.toString()
-                minusImageView.setOnClickListener { }
-                plusImageView.setOnClickListener { }
-            }
-        }
     }
 }

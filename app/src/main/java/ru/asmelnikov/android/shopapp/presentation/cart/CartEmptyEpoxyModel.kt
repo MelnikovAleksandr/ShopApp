@@ -10,6 +10,6 @@ data class CartEmptyEpoxyModel(
 ) : ViewBindingKotlinModel<EpoxyModelCartEmptyBinding>(R.layout.epoxy_model_cart_empty) {
 
     override fun EpoxyModelCartEmptyBinding.bind() {
-        button.setOnClickListener { onClick }
+        button.setOnClickListener(onClick)
     }
 }
