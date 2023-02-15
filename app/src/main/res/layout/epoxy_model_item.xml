@@ -97,6 +97,33 @@
                 app:layout_constraintTop_toBottomOf="@id/product_title_text_view"
                 tools:text="men's clothing" />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/rating_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="50"
+                app:indicatorColor="@color/purple_700"
+                app:indicatorSize="34dp"
+                app:layout_constraintBottom_toBottomOf="@id/product_price_text_view"
+                app:layout_constraintEnd_toStartOf="@id/add_to_cart_button"
+                app:layout_constraintStart_toEndOf="@id/product_price_text_view"
+                app:layout_constraintTop_toTopOf="@id/product_price_text_view"
+                app:trackColor="@color/purple_100"
+                tools:progress="42" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/rating_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/purple_700"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/rating_indicator"
+                app:layout_constraintEnd_toEndOf="@id/rating_indicator"
+                app:layout_constraintStart_toStartOf="@id/rating_indicator"
+                app:layout_constraintTop_toTopOf="@id/rating_indicator"
+                tools:text="4.2" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/product_price_text_view"
                 android:layout_width="wrap_content"

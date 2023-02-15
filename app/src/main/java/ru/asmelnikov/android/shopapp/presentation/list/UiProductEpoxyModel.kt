@@ -9,6 +9,7 @@ import ru.asmelnikov.android.shopapp.databinding.EpoxyModelItemBinding
 import ru.asmelnikov.android.shopapp.epoxy.ViewBindingKotlinModel
 import ru.asmelnikov.android.shopapp.models.ui.UiProduct
 import java.text.NumberFormat
+import kotlin.math.roundToInt
 
 data class UiProductEpoxyModel(
     val uiProduct: UiProduct?,
@@ -62,6 +63,11 @@ data class UiProductEpoxyModel(
                     imgProgressBar.isGone = true
                 }
             }
+
+            //Rating
+            ratingIndicator.progress = (uiProduct.product.rating.value * 10).roundToInt()
+            ratingTextView.text = "${uiProduct.product.rating.value}"
+
         } ?: shimmerLayout.startShimmer()
     }
 }
