@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.FragmentCartBinding
 import ru.asmelnikov.android.shopapp.models.ui.UiProductCart
+import java.math.BigDecimal
+import java.text.NumberFormat
 import kotlin.math.max
 
 @AndroidEntryPoint
@@ -28,6 +30,8 @@ class CartFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<CartFragmentViewModel>()
+
+    private val currencyFormatter = NumberFormat.getCurrencyInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,8 +74,28 @@ class CartFragment : Fragment() {
                 UiState.NonEmpty(uiProducts)
             }
             epoxyController.setData(viewState)
+            updateTotalLayout(uiProducts)
         }
 
+        setupSwipeToDelete()
+
+        binding.checkOutButton.setOnClickListener {
+
+        }
+
+    }
+
+    private fun updateTotalLayout(uiProductsInCart: List<UiProductCart>) {
+        val totalAmount =
+            uiProductsInCart.sumOf { BigDecimal(it.quantity) * it.uiProduct.product.price }
+        binding.totalDescription.text = getString(
+            R.string.total_description,
+            uiProductsInCart.size, currencyFormatter.format(totalAmount)
+        )
+        binding.checkOutButton.isEnabled = uiProductsInCart.isNotEmpty()
+    }
+
+    private fun setupSwipeToDelete() {
         EpoxyTouchHelper
             .initSwiping(binding.epoxyRecyclerView)
             .right()

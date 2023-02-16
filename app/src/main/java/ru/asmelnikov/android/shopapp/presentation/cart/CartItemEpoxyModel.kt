@@ -8,6 +8,8 @@ import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.EpoxyModelCartItemBinding
 import ru.asmelnikov.android.shopapp.epoxy.ViewBindingKotlinModel
 import ru.asmelnikov.android.shopapp.models.ui.UiProductCart
+import java.math.BigDecimal
+import java.text.NumberFormat
 
 data class CartItemEpoxyModel(
     val uiProductInCart: UiProductCart,
@@ -16,10 +18,15 @@ data class CartItemEpoxyModel(
     private val onQuantityChanged: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartItemBinding>(R.layout.epoxy_model_cart_item) {
 
+    private val currencyFormatter = NumberFormat.getCurrencyInstance()
+
     override fun EpoxyModelCartItemBinding.bind() {
         swipeToDismissTextView.translationX = 0f
+
         // Setup text
+        val totalPrice = uiProductInCart.uiProduct.product.price * BigDecimal(uiProductInCart.quantity)
         productTitleTextView.text = uiProductInCart.uiProduct.product.title
+        productPriceTextView.text = currencyFormatter.format(totalPrice)
 
         //Favorite icon
         val imageRes = if (uiProductInCart.uiProduct.isFavorite) {
