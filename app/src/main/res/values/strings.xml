@@ -6,4 +6,7 @@
     <string name="cart">Cart</string>
     <string name="profile">Profile</string>
     <string name="swipe_to_delete">Swipe to delete</string>
+    <string name="total">Total</string>
+    <string name="checkout">Checkout</string>
+    <string name="total_description">%1$d items for %2$s</string>
 </resources>
