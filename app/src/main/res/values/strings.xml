@@ -9,4 +9,5 @@
     <string name="total">Total</string>
     <string name="checkout">Checkout</string>
     <string name="total_description">%1$d items for %2$s</string>
+    <string name="login">login</string>
 </resources>

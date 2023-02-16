@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.asmelnikov.android.shopapp.presentation.profile.auth.AuthService
 import java.time.Duration
 import javax.inject.Singleton
 
@@ -41,6 +42,12 @@ object NetworkModule {
     @Singleton
     fun providesProductService(retrofit: Retrofit): ProductService {
         return retrofit.create(ProductService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
 }
