@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Response
+import ru.asmelnikov.android.shopapp.models.domain.Address
 import ru.asmelnikov.android.shopapp.models.mapper.UserMapper
 import ru.asmelnikov.android.shopapp.models.network.LoginResponse
 import ru.asmelnikov.android.shopapp.models.network.NetworkUser
@@ -69,6 +70,15 @@ class AuthViewModel @Inject constructor(
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:${phoneNumber}")
         _intentFlow.emit(intent)
+    }
+
+    fun sendLocation() = viewModelScope.launch {
+        val address: Address = store.read {
+            (it.authState as ApplicationState.AuthState.Auth).user.address
+        }
+        val intentUri = Uri.parse("geo:${address.lat},${address.long}")
+        val mapIntent = Intent(Intent.ACTION_VIEW, intentUri)
+        _intentFlow.emit(mapIntent)
     }
 
     private fun String.capitalize(): String {
