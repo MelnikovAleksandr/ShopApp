@@ -2,10 +2,11 @@ package ru.asmelnikov.android.shopapp.redux
 
 import ru.asmelnikov.android.shopapp.models.domain.Filter
 import ru.asmelnikov.android.shopapp.models.domain.Product
+import ru.asmelnikov.android.shopapp.models.domain.User
 import ru.asmelnikov.android.shopapp.models.network.NetworkUser
 
 data class ApplicationState(
-    val user: NetworkUser? = null,
+    val user: User? = null,
     val products: List<Product> = emptyList(),
     val favoriteProductIds: Set<Int> = emptySet(),
     val expandedProductIds: Set<Int> = emptySet(),
