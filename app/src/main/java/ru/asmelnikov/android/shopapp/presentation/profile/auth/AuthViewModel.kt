@@ -1,8 +1,12 @@
 package ru.asmelnikov.android.shopapp.presentation.profile.auth
 
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -20,6 +24,9 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val userMapper: UserMapper
 ) : ViewModel() {
+
+    private val _intentFlow = MutableStateFlow<Intent?>(null)
+    val intentFlow: StateFlow<Intent?> = _intentFlow
 
     private fun ResponseBody?.parseError(): String? {
         return this?.byteStream()?.bufferedReader()?.readLine()?.capitalize()
@@ -53,6 +60,15 @@ class AuthViewModel @Inject constructor(
         store.update { applicationState ->
             applicationState.copy(authState = ApplicationState.AuthState.UnAuth())
         }
+    }
+
+    fun sendCallIntent() = viewModelScope.launch {
+        val phoneNumber: String = store.read {
+            (it.authState as ApplicationState.AuthState.Auth).user.phoneNumber
+        }
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:${phoneNumber}")
+        _intentFlow.emit(intent)
     }
 
     private fun String.capitalize(): String {
