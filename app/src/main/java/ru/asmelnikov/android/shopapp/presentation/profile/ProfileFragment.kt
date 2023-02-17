@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.FragmentProfileBinding
 import ru.asmelnikov.android.shopapp.presentation.profile.auth.AuthViewModel
+import ru.asmelnikov.android.shopapp.redux.ApplicationState
 import ru.asmelnikov.android.shopapp.utils.ResourceProvider
 import javax.inject.Inject
 
@@ -49,17 +50,16 @@ class ProfileFragment : Fragment() {
 
 
         authViewModel.store.stateFlow.map {
-            it.user
-        }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { user ->
+            it.authState
+        }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { authState ->
 
-            epoxyController.setData(user)
-
-            binding.headerTextView.text = if (user?.name?.firstname == null) {
+            epoxyController.setData(authState)
+            binding.headerTextView.text = if (authState is ApplicationState.AuthState.UnAuth) {
                 getString(R.string.sign_in)
             } else {
-                getString(R.string.welcome_message, user.name.firstname)
+                getString(R.string.welcome_message, authState.getGreetingMessage())
             }
-            binding.infoTextView.text = user?.email
+            binding.infoTextView.text = authState.getEmail()
         }
     }
 
