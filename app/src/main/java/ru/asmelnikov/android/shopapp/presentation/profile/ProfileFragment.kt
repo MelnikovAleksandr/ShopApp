@@ -11,6 +11,7 @@ import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.FragmentProfileBinding
 import ru.asmelnikov.android.shopapp.presentation.profile.auth.AuthViewModel
 
@@ -40,8 +41,15 @@ class ProfileFragment : Fragment() {
 
         authViewModel.store.stateFlow.map {
             it.user
-        }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) {
-            Log.i("USER", it.toString())
+        }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { user ->
+            Log.i("USER", user.toString())
+
+            binding.label.text = if (user?.name?.firstname == null) {
+                getString(R.string.sign_in)
+            } else {
+                getString(R.string.welcome_message, user.name.firstname)
+            }
+            binding.button.isEnabled = user == null
         }
     }
 

@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import ru.asmelnikov.android.shopapp.models.mapper.UserMapper
 import ru.asmelnikov.android.shopapp.models.network.LoginResponse
 import ru.asmelnikov.android.shopapp.models.network.NetworkUser
 import ru.asmelnikov.android.shopapp.redux.ApplicationState
@@ -17,14 +18,17 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     val store: Store<ApplicationState>,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userMapper: UserMapper
 ) : ViewModel() {
     fun login(username: String, password: String) = viewModelScope.launch {
         val response: Response<LoginResponse> = authRepository.login(username, password)
         if (response.isSuccessful) {
             val donUserResponse: Response<NetworkUser> = authRepository.fetchDon()
-            store.update {
-                it.copy(user = donUserResponse.body())
+            store.update { applicationState ->
+                applicationState.copy(
+                    user = donUserResponse.body()?.let { userMapper.buildFrom(it) }
+                )
             }
             if (donUserResponse.body() == null) {
                 Log.e("LOGIN", response.errorBody()?.toString() ?: response.message())
