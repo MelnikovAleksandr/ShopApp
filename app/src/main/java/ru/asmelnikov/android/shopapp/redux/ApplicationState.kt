@@ -3,10 +3,9 @@ package ru.asmelnikov.android.shopapp.redux
 import ru.asmelnikov.android.shopapp.models.domain.Filter
 import ru.asmelnikov.android.shopapp.models.domain.Product
 import ru.asmelnikov.android.shopapp.models.domain.User
-import ru.asmelnikov.android.shopapp.models.network.NetworkUser
 
 data class ApplicationState(
-    val user: User? = null,
+    val authState: AuthState = AuthState.UnAuth(),
     val products: List<Product> = emptyList(),
     val favoriteProductIds: Set<Int> = emptySet(),
     val expandedProductIds: Set<Int> = emptySet(),
@@ -19,4 +18,26 @@ data class ApplicationState(
         val filters: Set<Filter> = emptySet(),
         val selectedFilter: Filter? = null
     )
+
+    sealed interface AuthState {
+        data class Auth(val user: User) : AuthState
+        data class UnAuth(val errorString: String? = null) : AuthState
+
+        fun getGreetingMessage(): String {
+            return if (this is Auth) {
+                user.name.firstname
+            } else {
+                ""
+            }
+        }
+
+        fun getEmail(): String {
+            return if (this is Auth) {
+                user.email
+            } else {
+                ""
+            }
+        }
+
+    }
 }
