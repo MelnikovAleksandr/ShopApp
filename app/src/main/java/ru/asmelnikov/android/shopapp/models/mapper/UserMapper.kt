@@ -16,7 +16,7 @@ class UserMapper @Inject constructor() {
                 firstname = networkUser.name.firstname.capitalize(),
                 lastname = networkUser.name.lastname.capitalize()
             ),
-            username = networkUser.username,
+            username = networkUser.username.capitalize(),
             phoneNumber = networkUser.phone,
             address = Address(
                 city = networkUser.address.city,
@@ -25,7 +25,8 @@ class UserMapper @Inject constructor() {
                 zipcode = networkUser.address.zipcode,
                 lat = networkUser.address.geolocation.lat,
                 long = networkUser.address.geolocation.long
-            )
+            ),
+            email = networkUser.email
         )
     }
 }

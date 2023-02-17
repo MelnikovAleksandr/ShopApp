@@ -1,7 +1,6 @@
 package ru.asmelnikov.android.shopapp.presentation.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,20 @@ import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.FragmentProfileBinding
 import ru.asmelnikov.android.shopapp.presentation.profile.auth.AuthViewModel
+import ru.asmelnikov.android.shopapp.utils.ResourceProvider
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var profilerItemGenerator: UserProfilerItemGenerator
+
+    @Inject
+    lateinit var resourceProvider: ResourceProvider
 
     private val authViewModel by viewModels<AuthViewModel>()
 
@@ -35,21 +42,24 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button.setOnClickListener {
-            authViewModel.login(username = "donero", password = "ewedon")
-        }
+        val uiAction = ProfileUiAction(authViewModel)
+        val epoxyController =
+            ProfileEpoxyController(profilerItemGenerator, uiAction, resourceProvider)
+        binding.epoxyRecyclerView.setController(epoxyController)
+
 
         authViewModel.store.stateFlow.map {
             it.user
         }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { user ->
-            Log.i("USER", user.toString())
 
-            binding.label.text = if (user?.name?.firstname == null) {
+            epoxyController.setData(user)
+
+            binding.headerTextView.text = if (user?.name?.firstname == null) {
                 getString(R.string.sign_in)
             } else {
                 getString(R.string.welcome_message, user.name.firstname)
             }
-            binding.button.isEnabled = user == null
+            binding.infoTextView.text = user?.email
         }
     }
 

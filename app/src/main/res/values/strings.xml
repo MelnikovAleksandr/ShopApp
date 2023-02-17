@@ -12,4 +12,9 @@
     <string name="welcome_message">Welcome back, %1$s</string>
     <string name="sign_in">Sign in</string>
     <string name="login">login</string>
+    <string name="username">Username</string>
+    <string name="phone_number">Phone number</string>
+    <string name="location">Location</string>
+    <string name="sign_out">Sign out of your account</string>
+    <string name="logout">Logout</string>
 </resources>
