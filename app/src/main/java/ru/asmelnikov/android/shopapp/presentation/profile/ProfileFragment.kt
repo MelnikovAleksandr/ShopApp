@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import ru.asmelnikov.android.shopapp.R
 import ru.asmelnikov.android.shopapp.databinding.FragmentProfileBinding
@@ -52,7 +53,6 @@ class ProfileFragment : Fragment() {
         authViewModel.store.stateFlow.map {
             it.authState
         }.distinctUntilChanged().asLiveData().observe(viewLifecycleOwner) { authState ->
-
             epoxyController.setData(authState)
             binding.headerTextView.text = if (authState is ApplicationState.AuthState.UnAuth) {
                 getString(R.string.sign_in)
@@ -61,6 +61,11 @@ class ProfileFragment : Fragment() {
             }
             binding.infoTextView.text = authState.getEmail()
         }
+
+        authViewModel.intentFlow.filterNotNull().asLiveData()
+            .observe(viewLifecycleOwner) { intent ->
+                startActivity(intent)
+            }
     }
 
     override fun onDestroyView() {
