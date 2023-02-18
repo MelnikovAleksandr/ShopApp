@@ -11,6 +11,11 @@
         android:label="All Products"
         tools:layout="@layout/fragment_product_list" />
     <fragment
+        android:id="@+id/exploreFragment"
+        android:name="ru.asmelnikov.android.shopapp.presentation.explore.ExploreFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore" />
+    <fragment
         android:id="@+id/profileFragment"
         android:name="ru.asmelnikov.android.shopapp.presentation.profile.ProfileFragment"
         android:label="Profile"
@@ -24,7 +29,7 @@
             android:id="@+id/action_cartFragment_to_productListFragment"
             app:destination="@id/productListFragment"
             app:popUpTo="@+id/productListFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
