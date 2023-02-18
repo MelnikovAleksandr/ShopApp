@@ -7,16 +7,20 @@ import ru.asmelnikov.android.shopapp.models.domain.User
 data class ApplicationState(
     val authState: AuthState = AuthState.UnAuth(),
     val products: List<Product> = emptyList(),
+    val productFilterInfo: ProductFilterInfo = ProductFilterInfo(),
     val favoriteProductIds: Set<Int> = emptySet(),
     val expandedProductIds: Set<Int> = emptySet(),
-    val productFilterInfo: ProductFilterInfo = ProductFilterInfo(),
     val inCartProducts: Set<Int> = emptySet(),
-    val cartQuantitiesMap: Map<Int, Int> = emptyMap()
-
+    val cartQuantitiesMap: Map<Int, Int> = emptyMap(), // productId -> quantity
+    val explorePageMetadata: ExplorePageMetadata = ExplorePageMetadata()
 ) {
     data class ProductFilterInfo(
         val filters: Set<Filter> = emptySet(),
         val selectedFilter: Filter? = null
+    )
+
+    data class ExplorePageMetadata(
+        val selectedProductId: Int = 0
     )
 
     sealed interface AuthState {
@@ -38,6 +42,5 @@ data class ApplicationState(
                 ""
             }
         }
-
     }
 }

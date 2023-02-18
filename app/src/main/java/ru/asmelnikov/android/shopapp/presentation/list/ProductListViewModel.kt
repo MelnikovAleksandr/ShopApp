@@ -34,6 +34,9 @@ class ProductListViewModel @Inject constructor(
                 productFilterInfo = ApplicationState.ProductFilterInfo(
                     filters = filters,
                     selectedFilter = applicationState.productFilterInfo.selectedFilter
+                ),
+                explorePageMetadata = ApplicationState.ExplorePageMetadata(
+                    selectedProductId = products.getOrNull(0)?.id ?: 0
                 )
             )
         }
